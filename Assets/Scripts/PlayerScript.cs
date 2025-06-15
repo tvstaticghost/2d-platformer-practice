@@ -4,23 +4,34 @@ using UnityEngine.InputSystem;
 public class PlayerScript : MonoBehaviour
 {
     private Rigidbody2D body;
-    private PlayerInput playerInput;
-    private InputAction moveAction;
-    [SerializeField] float speed = 10f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        body = GetComponent<Rigidbody2D>();
-        playerInput = GetComponent<PlayerInput>();
-        moveAction = playerInput.actions["Move"];
+    public InputAction playerControls;
+    private Vector2 moveDirection = Vector2.zero;
+    
+    [SerializeField] float movementSpeed = 5f;
 
-        Debug.Log(moveAction);
+    private void OnEnable()
+    {
+        playerControls.Enable();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        Vector2 moveInput = moveAction.ReadValue<Vector2>();
-        body.linearVelocity = moveInput * speed;
+        playerControls.Disable();
+    }
+
+    private void Start()
+    {
+        body = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        moveDirection = playerControls.ReadValue<Vector2>();
+    }
+
+    private void FixedUpdate()
+    {
+        // Keep vertical velocity (e.g. gravity or jump)
+        body.linearVelocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
     }
 }
