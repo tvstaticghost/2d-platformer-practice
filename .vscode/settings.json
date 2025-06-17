@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "2D-Practice.sln"
+    "dotnet.defaultSolution": "2d-platformer-practice.sln"
 }
