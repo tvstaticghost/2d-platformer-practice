@@ -2060,7 +2060,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1602630972}
   redTileMap: {fileID: 145208764}
+  blueTileMap: {fileID: 436623982}
+  greenTileMap: {fileID: 228192709}
   redTile: {fileID: 11400000, guid: 06e66c1d40f63fd49ac3796e9440c5e7, type: 2}
+  blueTile: {fileID: 11400000, guid: 8e684a54fc1695d44bfeff9e0c70bc7d, type: 2}
+  greenTile: {fileID: 11400000, guid: 8037d5bb965278d43949999e094e08f3, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

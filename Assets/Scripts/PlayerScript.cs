@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 //Red - 7, Blue - 8, Green - 9
+//Change issue with collision on shapes when switching mid air and jumping from underneath
+//Fix rapid changing color
 
 public class PlayerScript : MonoBehaviour
 {
@@ -86,7 +88,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (block.TryGetComponent<Collider2D>(out var col))
             {
-                col.enabled = block.CompareTag(gameObject.tag); 
+                col.enabled = block.CompareTag(gameObject.tag);
             }
         }
     }
