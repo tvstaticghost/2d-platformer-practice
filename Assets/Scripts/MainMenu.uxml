@@ -2,9 +2,9 @@
     <Style src="project://database/Assets/Scripts/MainMenu.uss?fileID=7433441132597879392&amp;guid=2868d0d0fccd1c14e90330e06fb17f4e&amp;type=3#MainMenu" />
     <ui:VisualElement name="MenuContainer" class="menu-container" style="flex-grow: 1;">
         <ui:VisualElement name="ButtonContainer" class="button-container" style="flex-grow: 1;">
-            <ui:Button text="Play" name="PlayButton" class="play-button button" />
-            <ui:Button text="Quit" name="QuitButton" class="quit-button button" />
-            <ui:Label text="High Score: " name="HighScore" class="high-score-label" />
+            <ui:Button text="Play" name="PlayButton" class="play-button button" style="-unity-font-definition: url(&quot;project://database/Assets/Fonts/PixelifySans-VariableFont_wght.ttf?fileID=12800000&amp;guid=3a9fa3c21eeafee4599b413449872c8a&amp;type=3#PixelifySans-VariableFont_wght&quot;); font-size: 25px;" />
+            <ui:Button text="Quit" name="QuitButton" class="quit-button button" style="font-size: 25px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/PixelifySans-VariableFont_wght.ttf?fileID=12800000&amp;guid=3a9fa3c21eeafee4599b413449872c8a&amp;type=3#PixelifySans-VariableFont_wght&quot;);" />
+            <ui:Label text="High Score: " name="HighScore" class="high-score-label" style="font-size: 28px; -unity-font-definition: url(&quot;project://database/Assets/Fonts/PixelifySans-VariableFont_wght.ttf?fileID=12800000&amp;guid=3a9fa3c21eeafee4599b413449872c8a&amp;type=3#PixelifySans-VariableFont_wght&quot;);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

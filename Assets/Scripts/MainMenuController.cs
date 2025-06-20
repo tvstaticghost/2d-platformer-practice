@@ -45,6 +45,8 @@ public class MainMenuController : MonoBehaviour
 
         quitButton = mainMenuRoot.Q<Button>("QuitButton");
         quitButton.clickable.clicked += QuitGame;
+
+        SpawnCube();
     }
 
     public void StartGame()
