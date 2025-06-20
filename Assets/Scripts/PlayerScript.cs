@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 //Red - 7, Blue - 8, Green - 9
 //Change issue with collision on shapes when switching mid air and jumping from underneath
@@ -20,6 +21,10 @@ public class PlayerScript : MonoBehaviour
     private LayerMask groundLayers;
     public int maxJumps = 2;
     int jumpsRemaining;
+
+    [SerializeField] float deathHeight;
+    [SerializeField] float colorChangeTimer = 0.3f;
+    private bool canChangeColor = true;
 
     private string currentPlayerTag;
 
@@ -37,29 +42,53 @@ public class PlayerScript : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
         isGrounded();
+
+        if (transform.position.y <= -16.7)
+        {
+            PlayerFall();
+        }
+
+        colorChangeTimer -= Time.deltaTime;
+        if (colorChangeTimer <= 0f)
+        {
+            canChangeColor = true;
+        }
+    }
+
+    private void PlayerFall()
+    {
+        Debug.Log("Player Fell");
+        transform.position = new Vector3(4.62f, -3.43f, 0f);
+        rb.linearVelocity = Vector2.zero;
     }
 
     // I Need to add a brief cooldown or come up with a solution to stop rapid color changing when pressing the key once.
     public void ChangePlayerColor()
     {
-        switch (gameObject.tag)
+        if (canChangeColor)
         {
-            case "Red":
-                gameObject.tag = "Blue";
-                gameObject.GetComponent<SpriteRenderer>().color = new Color32(90, 110, 225, 255);
-                break;
-            case "Blue":
-                gameObject.tag = "Green";
-                gameObject.GetComponent<SpriteRenderer>().color = new Color32(107, 190, 48, 255);
-                break;
-            default:
-                gameObject.tag = "Red";
-                gameObject.GetComponent<SpriteRenderer>().color = new Color32(191, 56, 53, 255);
-                break;
-        }
+            switch (gameObject.tag)
+            {
+                case "Red":
+                    gameObject.tag = "Blue";
+                    gameObject.GetComponent<SpriteRenderer>().color = new Color32(90, 110, 225, 255);
+                    break;
+                case "Blue":
+                    gameObject.tag = "Green";
+                    gameObject.GetComponent<SpriteRenderer>().color = new Color32(107, 190, 48, 255);
+                    break;
+                default:
+                    gameObject.tag = "Red";
+                    gameObject.GetComponent<SpriteRenderer>().color = new Color32(191, 56, 53, 255);
+                    break;
+            }
 
-        Debug.Log("Player Tag: " + gameObject.tag);
-        UpdateBlockColliders();
+            Debug.Log("Player Tag: " + gameObject.tag);
+            UpdateBlockColliders();
+
+            canChangeColor = false;
+            colorChangeTimer = 0.3f;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
