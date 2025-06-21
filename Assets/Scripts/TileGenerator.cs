@@ -1,5 +1,4 @@
-using System.Linq;
-using UnityEditor;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,6 +12,9 @@ public class TileGenerator : MonoBehaviour
     public TileBase blueTile;
     public TileBase greenTile;
     private Vector3Int targetPos;
+
+    [SerializeField] AudioClip kickClip;
+    [SerializeField] AudioSource audioSource;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,63 +32,61 @@ public class TileGenerator : MonoBehaviour
         targetPos = new Vector3Int(7, -5, 0);
         redTileMap.SetTile(targetPos, redTile);
 
-        GenerateTileSet();
+        StartCoroutine(GenerateTileSetCoroutine());
     }
 
-    void GenerateTileSet()
+    private IEnumerator GenerateTileSetCoroutine()
     {
-        Tilemap[] maps = { redTileMap, blueTileMap, greenTileMap }; //All 3 tile maps in the game
+        int startingX = 7;
+        int startingY = -5;
+
+        Tilemap[] maps = { redTileMap, blueTileMap, greenTileMap };
         System.Random random = new();
 
-        //Need to increase y to go up
-        int startingX = 7;
-        int startingY = -5; //coordinates of the first tile after the black ground platform
-
         int numberOfTiles = random.Next(10, 30);
+        int tilesRendered = 0;
         bool goingRight = true;
 
-        for (int i = 0; i < numberOfTiles; i++)
+        while (tilesRendered < numberOfTiles)
         {
-            //randomly select a tile map and set the tile color to the cooresponding map
             Tilemap mapSelection = maps[random.Next(0, maps.Length)];
             TileBase tileSelection;
 
             if (mapSelection == redTileMap)
-            {
                 tileSelection = redTile;
-            }
             else if (mapSelection == blueTileMap)
-            {
                 tileSelection = blueTile;
-            }
             else
-            {
                 tileSelection = greenTile;
-            }
 
-            //fix logic to space out map in a branching pattern
+            // Randomly switch direction
             int randomChance = random.Next(0, 11);
             if (randomChance == 2)
             {
-                //switch directions
                 goingRight = !goingRight;
                 startingY++;
             }
 
             if (goingRight)
-            {
                 startingX += random.Next(1, 3);
-            }
             else
-            {
                 startingX -= random.Next(1, 3);
-            }
 
-            mapSelection.SetTile(new Vector3Int(startingX, random.Next(startingY - 2, startingY + 3), 0), tileSelection);
+            Vector3Int tilePosition = new(startingX, random.Next(startingY - 2, startingY + 3), 0);
+            mapSelection.SetTile(tilePosition, tileSelection);
+
             startingX++;
             startingY++;
-        }
+            tilesRendered++;
 
+            if (kickClip != null)
+            {
+                audioSource.PlayOneShot(kickClip);
+            }
+
+            // ⏳ Wait a bit before placing the next tile
+            yield return new WaitForSeconds(0.3f); // <-- adjust delay time here
+        }
     }
 
     // Update is called once per frame

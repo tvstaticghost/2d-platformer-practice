@@ -24,6 +24,9 @@ public class MainMenuController : MonoBehaviour
     private Button playButton;
     private Button quitButton;
 
+    [SerializeField] AudioSource hoverSound;
+    [SerializeField] AudioClip hoverClip;
+
     void Start()
     {
         newVec = new Vector3(1.24f, -5.6f, 0);
@@ -42,9 +45,22 @@ public class MainMenuController : MonoBehaviour
 
         playButton = mainMenuRoot.Q<Button>("PlayButton");
         playButton.clickable.clicked += StartGame;
+        playButton.RegisterCallback<MouseEnterEvent>(evt => {
+            if (hoverClip != null)
+            {
+                hoverSound.PlayOneShot(hoverClip);
+            }
+        });
 
         quitButton = mainMenuRoot.Q<Button>("QuitButton");
         quitButton.clickable.clicked += QuitGame;
+        quitButton.RegisterCallback<MouseEnterEvent>(evt =>
+        {
+            if (hoverClip != null)
+            {
+                hoverSound.PlayOneShot(hoverClip);
+            }
+        });
 
         SpawnCube();
     }
