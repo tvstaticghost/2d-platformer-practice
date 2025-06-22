@@ -1,0 +1,30 @@
+using UnityEngine;
+
+public class PlatformTrigger : MonoBehaviour
+{
+    public TileGenerator tileGenerator;
+    void Start()
+    {
+        // Automatically find the TileGenerator on the "Grid" GameObject
+        GameObject gridObject = GameObject.Find("Grid");
+
+        if (gridObject != null)
+        {
+            tileGenerator = gridObject.GetComponent<TileGenerator>();
+        }
+
+        if (tileGenerator == null)
+        {
+            Debug.LogWarning("TileGenerator not found on Grid object!");
+        }
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == 3 && other.gameObject.transform.position.y >= gameObject.transform.position.y)
+        {
+            Debug.Log("Player landed");
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            tileGenerator.ClearAllTiles();
+        }
+    }
+}

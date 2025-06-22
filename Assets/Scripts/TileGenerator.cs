@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,9 +9,11 @@ public class TileGenerator : MonoBehaviour
     public Tilemap redTileMap;
     public Tilemap blueTileMap;
     public Tilemap greenTileMap;
+    public GameObject platform;
     public TileBase redTile;
     public TileBase blueTile;
     public TileBase greenTile;
+    public TileBase groundTile;
     private Vector3Int targetPos;
 
     [SerializeField] AudioClip kickClip;
@@ -35,7 +38,7 @@ public class TileGenerator : MonoBehaviour
         StartCoroutine(GenerateTileSetCoroutine());
     }
 
-    private IEnumerator GenerateTileSetCoroutine()
+    public IEnumerator GenerateTileSetCoroutine()
     {
         int startingX = 7;
         int startingY = -5;
@@ -87,11 +90,17 @@ public class TileGenerator : MonoBehaviour
             // ⏳ Wait a bit before placing the next tile
             yield return new WaitForSeconds(0.3f); // <-- adjust delay time here
         }
+
+        Instantiate(platform, new UnityEngine.Vector3(startingX + 3, startingY + 1, 0), UnityEngine.Quaternion.identity);
     }
 
-    // Update is called once per frame
-    void Update()
+    //NOW I NEED TO REGENERATE THE TILES AFTER LANDING ON THE PLATFORM AND INCREASE AND KEEP SCORE
+
+    public void ClearAllTiles()
     {
-        
+        redTileMap.ClearAllTiles();
+        blueTileMap.ClearAllTiles();
+        greenTileMap.ClearAllTiles();
     }
+    
 }
