@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -15,10 +16,19 @@ public class TileGenerator : MonoBehaviour
     public TileBase greenTile;
     public TileBase groundTile;
     private Vector3Int targetPos;
+    public GameObject player;
+    private UnityEngine.Vector3 playerPos;
 
     [SerializeField] AudioClip kickClip;
     [SerializeField] AudioSource audioSource;
+
+    public static TileGenerator Instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private void Awake()
+    {
+       Instance = this;
+    }
     void Start()
     {
         BoundsInt bounds = tilemap.cellBounds;
@@ -32,16 +42,20 @@ public class TileGenerator : MonoBehaviour
         }
 
         //Draw tile logic - I DID IT!
-        targetPos = new Vector3Int(7, -5, 0);
-        redTileMap.SetTile(targetPos, redTile);
+        //targetPos = new Vector3Int(7, -5, 0);
+        //redTileMap.SetTile(targetPos, redTile);
 
         StartCoroutine(GenerateTileSetCoroutine());
     }
 
     public IEnumerator GenerateTileSetCoroutine()
     {
-        int startingX = 7;
-        int startingY = -5;
+        yield return new WaitForSeconds(1f);
+
+        playerPos = player.transform.position; //Assign the player's transform position as the playerPos
+
+        int startingX = (int) playerPos.x;
+        int startingY = (int) playerPos.y;
 
         Tilemap[] maps = { redTileMap, blueTileMap, greenTileMap };
         System.Random random = new();

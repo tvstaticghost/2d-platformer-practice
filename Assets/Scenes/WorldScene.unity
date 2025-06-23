@@ -2014,6 +2014,7 @@ MonoBehaviour:
   blueTile: {fileID: 11400000, guid: 8e684a54fc1695d44bfeff9e0c70bc7d, type: 2}
   greenTile: {fileID: 11400000, guid: 8037d5bb965278d43949999e094e08f3, type: 2}
   groundTile: {fileID: 11400000, guid: 968d29a6bcbabc54a9f4f2ae0582051d, type: 2}
+  player: {fileID: 428618621}
   kickClip: {fileID: 8300000, guid: cfb4cff153a6be54591ddbf8f53a9a10, type: 3}
   audioSource: {fileID: 1659859052}
 --- !u!82 &1659859052

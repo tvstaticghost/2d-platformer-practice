@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlatformTrigger : MonoBehaviour
 {
     public TileGenerator tileGenerator;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip scoreClip;
     void Start()
     {
         // Automatically find the TileGenerator on the "Grid" GameObject
@@ -20,11 +22,18 @@ public class PlatformTrigger : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == 3 && other.gameObject.transform.position.y >= gameObject.transform.position.y)
+        if (other.gameObject.layer == 3 && other.gameObject.transform.position.y + other.GetComponent<SpriteRenderer>().bounds.size.y >= gameObject.transform.position.y)
         {
             Debug.Log("Player landed");
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             tileGenerator.ClearAllTiles();
+
+            if (scoreClip != null)
+            {
+                audioSource.PlayOneShot(scoreClip);
+            }
+
+            StartCoroutine(TileGenerator.Instance.GenerateTileSetCoroutine());
         }
     }
 }
