@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class TileGenerator : MonoBehaviour
     public Tilemap blueTileMap;
     public Tilemap greenTileMap;
     public GameObject platform;
+    private List<GameObject> activePlatforms = new List<GameObject>();
     public TileBase redTile;
     public TileBase blueTile;
     public TileBase greenTile;
@@ -105,7 +107,8 @@ public class TileGenerator : MonoBehaviour
             yield return new WaitForSeconds(0.3f); // <-- adjust delay time here
         }
 
-        Instantiate(platform, new UnityEngine.Vector3(startingX + 3, startingY + 1, 0), UnityEngine.Quaternion.identity);
+        GameObject newPlatform = Instantiate(platform, new UnityEngine.Vector3(startingX + 3, startingY + 1, 0), UnityEngine.Quaternion.identity);
+        activePlatforms.Add(newPlatform);
     }
 
     //NOW I NEED TO REGENERATE THE TILES AFTER LANDING ON THE PLATFORM AND INCREASE AND KEEP SCORE
@@ -115,6 +118,29 @@ public class TileGenerator : MonoBehaviour
         redTileMap.ClearAllTiles();
         blueTileMap.ClearAllTiles();
         greenTileMap.ClearAllTiles();
+    }
+
+    public void ClearAllPlatforms()
+    {
+        foreach (GameObject platform in activePlatforms)
+        {
+            Destroy(platform);
+        }
+        activePlatforms.Clear();
+    }
+
+    public void ClearOldPlatforms()
+    {
+        if (activePlatforms.Count > 1)
+        {
+            GameObject oldPlatforms = activePlatforms[0];
+            activePlatforms.RemoveAt(0);
+            Destroy(oldPlatforms);
+        }
+        else
+        {
+            Debug.Log("Only 1 Platform, the one you're on");
+        }
     }
     
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlatformTrigger : MonoBehaviour
 {
     public TileGenerator tileGenerator;
+    public PlayerScript playerScript;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip scoreClip;
     void Start()
@@ -19,6 +20,12 @@ public class PlatformTrigger : MonoBehaviour
         {
             Debug.LogWarning("TileGenerator not found on Grid object!");
         }
+
+        GameObject playerObject = GameObject.Find("Player");
+        if (playerObject != null)
+        {
+            playerScript = playerObject.GetComponent<PlayerScript>();
+        }
     }
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -34,6 +41,9 @@ public class PlatformTrigger : MonoBehaviour
             }
 
             StartCoroutine(TileGenerator.Instance.GenerateTileSetCoroutine());
+            playerScript.SetHasReachedPlatform();
+            TileGenerator.Instance.ClearOldPlatforms();
+            playerScript.IncrementPlayerScore();
         }
     }
 }

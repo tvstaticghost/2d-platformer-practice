@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using JetBrains.Annotations;
 using NUnit.Framework.Internal;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -29,6 +30,11 @@ public class PlayerScript : MonoBehaviour
     private string currentPlayerTag;
 
     float horizontalMovement;
+    public TileGenerator tileGenerator;
+    private bool hasReachedPlatform = false;
+
+    private int playerScore = 0;
+    public TextMeshProUGUI scoreText;
 
     void Start()
     {
@@ -60,6 +66,21 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("Player Fell");
         transform.position = new Vector3(4.62f, -3.43f, 0f);
         rb.linearVelocity = Vector2.zero;
+
+        if (hasReachedPlatform)
+        {
+            tileGenerator.ClearAllTiles();
+            tileGenerator.ClearAllPlatforms();
+            StartCoroutine(TileGenerator.Instance.GenerateTileSetCoroutine());
+            hasReachedPlatform = false;
+        }
+
+        ResetPlayerScore();
+    }
+
+    public void SetHasReachedPlatform()
+    {
+        hasReachedPlatform = true;
     }
 
     // I Need to add a brief cooldown or come up with a solution to stop rapid color changing when pressing the key once.
@@ -96,16 +117,6 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             return;
-        }
-
-        if (collision.gameObject.CompareTag(gameObject.tag))
-        {
-            Debug.Log("Match!");
-        }
-        else
-        {
-            collision.gameObject.GetComponent<Collider2D>().enabled = false;
-            Debug.Log("No Match!");
         }
     }
 
@@ -156,5 +167,17 @@ public class PlayerScript : MonoBehaviour
     {
         Gizmos.color = UnityEngine.Color.white;
         Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
+    }
+
+    public void IncrementPlayerScore()
+    {
+        playerScore++;
+        scoreText.text = playerScore.ToString();
+    }
+
+    public void ResetPlayerScore()
+    {
+        playerScore = 0;
+        scoreText.text = playerScore.ToString();
     }
 }
